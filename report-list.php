@@ -22,6 +22,8 @@
 </head>
 
 <body>
+<h1 class="h1">รายนามภิกขุและสามเณร</h1>
+<h2 class="h2">วัดนาป่าพง</h2>
 <?php
 	$bhikkhu_sort = array();
 
@@ -71,8 +73,9 @@
 		$recordsetPositionExtra = $objConn->Execute($sqlCommand);
 
 		if ($i==0 || $i%11 == 0) { // ให้หน้าละ 11 แถว
-			echo '<h1 class="h1">รายนามภิกขุและสามเณร</h1>';
-			echo '<h2 class="h2">วัดนาป่าพง</h2>';
+		//if ($i==0) { // ให้หน้าละ 11 แถว
+		//	echo '<h1 class="h1">รายนามภิกขุและสามเณร</h1>';
+		//	echo '<h2 class="h2">วัดนาป่าพง</h2>';
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
