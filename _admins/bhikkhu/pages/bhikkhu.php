@@ -69,8 +69,9 @@
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view
-	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id');
+	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id, offence');
 	$xcrud->column_width('ordinate', '180px');
+	$xcrud->column_width('offence', '80px');
 
 	// ซ่อน field (หน้าเพิ่ม, หน้าแก้ไข)
 	$xcrud->fields("age, phansa, phansa_year", true);
@@ -91,6 +92,9 @@
 	// ถ้าต้องการตัดรูปขนาด 900x200 ให้เอา 900/200 จะได้ ratio = 4.5
 	// ในตัวอย่างนี้ต้องการ crop รูปขนาด 100x100 ให้เอา 100/100 ได้ ratio = 1 จากนั้นก็ให้ resize รูปลงเหลือขนาด 100x100 (width x height)
 	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100, 'manual_crop' => true));
+
+	// ภิกษุอาบัติหนักให้แสดงแถวเป็นสีแดง ต้องมี field ในคำสั่ง $xcrud->columns();
+	$xcrud->highlight_row('offence', '=', 'มี', '#FFE6E6');
 
 	// ซ่อนปุ่ม standard (หน้าเพิ่ม, หน้าแก้ไข)
 	$xcrud->hide_button('save_new, save_edit');
