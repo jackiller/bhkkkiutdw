@@ -67,8 +67,8 @@ padding: 0;
 outline: 0;
 border: 0;
 }
-
-.endpage{page-break-after: always; }
+.margintop{padding-top:10mm;}
+.endpage{page-break-before: always; }
 .page-break{ page-break-after: always;}
 .clear {
     clear: both;

@@ -72,11 +72,10 @@
 		$sqlCommand = "SELECT * FROM tbl_position WHERE position_id=" . $recordset->fields["position_extra_id"] . " LIMIT 1";
 		$recordsetPositionExtra = $objConn->Execute($sqlCommand);
 
-		if ($i==0 || $i%11 == 0) { // ให้หน้าละ 11 แถว
-		//if ($i==0) { // ให้หน้าละ 11 แถว
-		//	echo '<h1 class="h1">รายนามภิกขุและสามเณร</h1>';
-		//	echo '<h2 class="h2">วัดนาป่าพง</h2>';
+		if ($i==0) { // ให้หน้าละ 11 แถว
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
+		} elseif ($i%11 == 0) {
+			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot endpage margintop">';
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
 		}
