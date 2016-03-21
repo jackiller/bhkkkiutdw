@@ -27,8 +27,8 @@
 <?php
 	$bhikkhu_sort = array();
 
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 ORDER BY phansa_year DESC, ordinate";
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -37,8 +37,8 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 4 ORDER BY phansa_year DESC, ordinate";
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -47,8 +47,8 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 4 ORDER BY phansa_year DESC, ordinate";
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -57,6 +57,25 @@
 		$recordset->MoveNext();
 	endwhile;
 
+//--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'ไม่มี' AND position_id = 3 ORDER BY ordinate, bhikkhu_id";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+//--------------------------------------> ดึงข้อมูลพระที่อาบัติหนักทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามพรรษาจากมากไปน้อย
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'มี' ORDER BY phansa_year DESC, ordinate";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
 
 //------------------------------------> loop แสดงข้อมูล
 	$i = 0;
@@ -101,20 +120,55 @@
 			<span class="block text_white">&nbsp;</span>
 		  </td>
 		  <td class="td-width-50">
-			<span class="block name"><?php echo $recordset->fields["alias"]; ?></span>
-			<span class="block nickname"><?php echo $recordset->fields["alias_meaning"]; ?></span>
+			<span class="block name">
+			<?php
+				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีฉายา
+					echo "&nbsp;";
+				} else {
+					echo $recordset->fields["alias"];
+				}
+			?>
+			</span>
+			<span class="block nickname">
+			<?php
+				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีความหมายฉายา
+					echo "&nbsp;";
+				} else {
+					echo $recordset->fields["alias_meaning"];
+				}
+			?>
+			</span>
 			<span class="block text_white">&nbsp;</span>
 		  </td>
 
 		  <td class="td-width-80">
-			<span class="block name">พรรษา</span>
-			<span class="block nickname">อุปสมบท</span>
+			<?php
+				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีพรรษา
+					echo "&nbsp;";
+				} else {
+					echo "<span class='block name'>พรรษา</span>";
+				}
+			?>
+			<?php
+				if ($recordset->fields["position_id"] == 3) { // สามเณรใช้ บรรพชา
+					echo "<span class='block nickname'>บรรพชา</span>";
+				} else {
+					echo "<span class='block nickname'>อุปสมบท</span>";
+				}
+			?>
 			<span class="block meaning">กุฏิ</span>
 		  </td>
 
 		  <td class="td-width-80">
-			<!--<span class="block"><?php //echo _calculate_phansa($recordset->fields["ordinate"]); ?></span>-->
-			<span class="block bolder name"><?php echo _thai_digit($recordset->fields["phansa_year"]); ?></span>
+			<span class="block bolder name">
+			<?php
+				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีพรรษา
+					echo "&nbsp;";
+				} else {
+					echo _thai_digit($recordset->fields["phansa_year"]);
+				}
+			?>
+			</span>
 			<span class="block nickname"><?php echo _thai_digit(format_date_thai($recordset->fields["ordinate"])); ?></span>
 			<span class="block meaning"><?php echo _thai_digit($recordset->fields["kuti"]); ?></span>
 		  </td>
