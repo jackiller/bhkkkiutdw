@@ -1,0 +1,1 @@
+﻿search หาคำว่า *9-> ใน file jquery-cloneya-mod-by-qwer
