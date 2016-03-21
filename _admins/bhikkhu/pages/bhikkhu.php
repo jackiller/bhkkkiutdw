@@ -169,6 +169,7 @@
 
 	// override standard edit view
 	// กรณีที่ทำ nested table แบบเป็น tab พอกดเข้าไปที่ edit view ของตัว nestd table ต้องการเปลี่ยน wording ของปุ่มใน nested table ให้ต่างจากปุ่มใน parent table
+	$xcrud_document->load_view('create','xcrud_nested_detail_view.php'); // file locate in xcrud/themes/your_current_theme/your_file_theme.php
 	$xcrud_document->load_view('edit','xcrud_nested_detail_view.php'); // file locate in xcrud/themes/your_current_theme/your_file_theme.php
 
 //	$xcrud_document->benchmark(true); // วัดประสิทธิภาพความเร็วในการรันหน้านี้
