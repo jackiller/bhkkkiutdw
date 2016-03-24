@@ -63,7 +63,7 @@
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view
-	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id, offence');
+	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id');
 	$xcrud->column_width('ordinate', '180px');
 	$xcrud->column_width('offence', '80px');
 
@@ -97,7 +97,7 @@
 
 ?>
 
-<?php if (in_array(2, $_SESSION['jigowatt']['user_level'])) : ?>// 2 = special
+<?php if (in_array(2, $_SESSION['jigowatt']['user_level'])) : // 2 = special ?>
 <form action="" method="POST">
 	<input type="submit" name="BTTclear" id="BTTclear" value="ล้างรายการลงอุโบสถ" class="btn btn-danger xcrud-action" />
 </form>
