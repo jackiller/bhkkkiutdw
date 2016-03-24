@@ -5,6 +5,11 @@ $pagedata = array(
         'description' => 'ข้อมูลภิกขุและสามเณร',
         'filename' => 'bhikkhu.php'),
 
+    'ubosot' => array(
+        'title_1' => 'รายงานลงอุโบสถ',
+        'description' => 'รายงานลงอุโบสถ',
+        'filename' => 'ubosot.php'),
+
     'blank_0' => array(
         'title_1' => '',
         'description' => '',

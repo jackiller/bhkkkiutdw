@@ -381,13 +381,56 @@ function calculate_phansa($value, $fieldname, $primary, $row, $xcrud) {
 
 }
 
+// call from bhikku.php -> $xcrud->create_action() and $xcrud->button()
+function ubosot_action($xcrud) {
+
+	if ($xcrud->get('primary')) {
+
+		$db = Xcrud_db::get_instance();
+
+		$query = 'SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id =' . $xcrud->get('primary') . ' LIMIT 1';
+		$db->query($query);
+		//----> กรณี query ออกมาแล้วได้แถวเดียว
+		$row = $db->row(); // ถ้ารู้ว่าออกมา 1 แถวแน่ ๆ ให้ใช้ $db->row()
+		if ($row) {
+			if ($row['offence'] == 'มี') {
+				$xcrud->set_exception('', 'ไม่สามารถเพิ่มรายชื่อเพื่อลงอุโบสถได้เนื่องจาก อาบัติหนัก', 'error');
+				return;
+			}
+		}
+
+		$query = 'SELECT * FROM tbl_temp_ubosot WHERE bhikkhu_id =' . $xcrud->get('primary') . ' LIMIT 1';
+		$db->query($query);
+		//----> กรณี query ออกมาแล้วได้แถวเดียว
+		$row = $db->row(); // ถ้ารู้ว่าออกมา 1 แถวแน่ ๆ ให้ใช้ $db->row()
+		if ($row)
+		{
+			$xcrud->set_exception('', 'รายชื่อนี้ถูกเพิ่มเข้าไปเพื่อลงอุโบสถแล้ว', 'error');
+			return;
+		}
+
+		$query = 'INSERT INTO tbl_temp_ubosot (bhikkhu_id) VALUES (' . $xcrud->get('primary') . ')';
+		$db->query($query);
+		$xcrud->set_exception('', 'เพิ่มรายชื่อเพื่อลงอุโบสถ เรียบร้อยแล้ว', 'success');
+	}
+
+}
+
+// call from ubosot.php -> $xcrud->replace_remove()
+function delete_data_tbl_temp_ubosot($primary_key, $xcrud){
+
+	$db = Xcrud_db::get_instance();
+	$query = 'DELETE FROM tbl_temp_ubosot WHERE bhikkhu_id=' . (int)$primary_key;
+    $db->query($query);
+
+}
+
 function callback_format_date_column($value, $fieldname, $primary, $row, $xcrud) {
 
 	$value = format_date($value, 'D2');
     return $value;
 
 }
-
 
 function format_date_before_edit($row_data, $primary, $xcrud) {
 
@@ -410,6 +453,7 @@ function format_date_before_edit($row_data, $primary, $xcrud) {
 	$row_data->set('birthday', $output_date); // update ค่าไปที่ screen input
 
 }
+
 
 //***************************************************************************************************
 //*                                 CUSTOM PRIVATE FUNCTION                                         *

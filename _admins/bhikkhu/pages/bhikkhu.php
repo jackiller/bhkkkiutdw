@@ -109,6 +109,17 @@
 	// ซึ่งตัว callback จะมีข้อเสียคือเมื่อระบบมีการ upload รูปภาพแบบ crop ได้ เวลาที่ user เลือกรูป crop แล้วเกิดใส่ข้อมูลใน field อื่น ๆ ไม่ครบหรือไม่ได้ใส่ พอกด submit รูปภาพที่ crop ไว้จะหายไป (เพราะมัน check ที่ server side จะมีการ refresh page เป็นผลให้ภาพหายไป)
 	// ซึ่งตรงนี้ยังหาวิธีแก้ไขไม่ได้ เลยจำเป็นต้องใช้ validation_required, validation_pattern แทนไปก่อน
 
+	// เพิ่มปุ่ม action เพิ่มรายชื่อพระที่จะลงอุโบสถ
+	if (in_array(2, $_SESSION['jigowatt']['user_level'])) { // 2 = special
+		$xcrud->create_action('add_to_ubosot', 'ubosot_action'); // action callback, function ubosot_action() in functions.php
+		$xcrud->button('#', 'เพิ่มรายชื่อลงอุโบสถ', 'glyphicon glyphicon-plus-sign', 'xcrud-action btn-success',
+			array(  // set action vars to the button
+				'data-task' => 'action',
+				'data-action' => 'add_to_ubosot',
+				'data-primary' => '{bhikkhu_id}')
+		);
+	}
+
 	if (in_array(3, $_SESSION['jigowatt']['user_level'])) { // 3 = only add role
 		$xcrud->unset_remove();
 	}
