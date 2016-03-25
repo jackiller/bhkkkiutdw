@@ -17,12 +17,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>รายนามภิกขุและสามเณร วัดนาป่าพง</title>
+<title>รายนามภิกขุ-สามเณร วัดนาป่าพง</title>
 <link href="css/print_report/print.css" rel="stylesheet" type="text/css"  media="all"/>
 </head>
 
 <body>
-<h1 class="h1">รายนามภิกขุและสามเณร</h1>
+<h1 class="h1">รายนามภิกขุ-สามเณร</h1>
 <h2 class="h2">วัดนาป่าพง</h2>
 <?php
 	$bhikkhu_sort = array();

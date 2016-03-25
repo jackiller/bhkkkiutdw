@@ -12,7 +12,7 @@
 	$db = Xcrud_db::get_instance(); // ถ้ามี operation ที่ต้องทำกับ db ให้สร้าง instance db ขึ้นมาก่อน
 
 	// กำหนดชื่อตาราง
-	$xcrud->table_name('ข้อมูลภิกขุและสามเณร');
+	$xcrud->table_name('รายนามภิกขุ-สามเณร');
 
 	// inner join table
 	// $xcrud->relation(main_table_relation_field, target_table, row_id_from_target_table, target_field_name)

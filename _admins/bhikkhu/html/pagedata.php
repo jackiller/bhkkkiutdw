@@ -1,13 +1,13 @@
 <?php
 $pagedata = array(
     'default' => array(
-        'title_1' => 'ข้อมูลภิกขุและสามเณร',
-        'description' => 'ข้อมูลภิกขุและสามเณร',
+        'title_1' => 'รายนามภิกขุ-สามเณร',
+        'description' => 'รายนามภิกขุ-สามเณร',
         'filename' => 'bhikkhu.php'),
 
     'ubosot' => array(
-        'title_1' => 'รายงานลงอุโบสถ',
-        'description' => 'รายงานลงอุโบสถ',
+        'title_1' => 'รายนามภิกขุ-สามเณรลงอุโบสถ',
+        'description' => 'รายนามภิกขุ-สามเณรลงอุโบสถ',
         'filename' => 'ubosot.php'),
 
     'blank_0' => array(

@@ -15,7 +15,7 @@
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->join('bhikkhu_id','tbl_temp_ubosot','bhikkhu_id', 'b');
-	$xcrud->table_name('รายชื่อลงอุโบสถ');
+	$xcrud->table_name('รายนามภิกขุ-สามเณรลงอุโบสถ');
 
 
 	// ต้องการให้ field search ตอน inner join เป็น drop down ให้เลือกได้ให้ใช้คำสั่งด้านล่างนี้ ( !!! ปิดคำสั่ง $xcrud->relation ออกด้วย !!!)
