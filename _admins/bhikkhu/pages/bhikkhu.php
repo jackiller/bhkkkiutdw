@@ -1,4 +1,8 @@
-<?php include("report-bhikkhu.php"); ?>
+<?php
+	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
+		include("report-bhikkhu.php");
+	endif;
+?>
 
 <?php
 
@@ -12,7 +16,11 @@
 	$db = Xcrud_db::get_instance(); // ถ้ามี operation ที่ต้องทำกับ db ให้สร้าง instance db ขึ้นมาก่อน
 
 	// กำหนดชื่อตาราง
-	$xcrud->table_name('รายนามภิกขุ-สามเณร');
+	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
+		$xcrud->table_name('พิมพ์รายนามภิกขุ-สามเณร (ติดบอร์ด)');
+	else:
+		$xcrud->table_name('รายนามภิกขุ-สามเณร');
+	endif;
 
 	// inner join table
 	// $xcrud->relation(main_table_relation_field, target_table, row_id_from_target_table, target_field_name)
@@ -35,7 +43,7 @@
 	$xcrud->pass_default('status_id', 1); // default value dropdown
 
 	unset($arr_data);
-	$arr_data = render_array_dropdown('tbl_position', 'position_id', 'position_desc'); // ตาราง master
+	$arr_data = render_array_dropdown('tbl_position_extra', 'position_extra_id', 'position_extra_desc'); // ตาราง master
 	$xcrud->change_type('position_extra_id','select', '', array('values'=>$arr_data)); // ทำให้ช่อง search เป็น dropdown
 	//<---
 
@@ -110,14 +118,17 @@
 	// ซึ่งตรงนี้ยังหาวิธีแก้ไขไม่ได้ เลยจำเป็นต้องใช้ validation_required, validation_pattern แทนไปก่อน
 
 	// เพิ่มปุ่ม action เพิ่มรายชื่อพระที่จะลงอุโบสถ
-	if (in_array(2, $_SESSION['jigowatt']['user_level'])) { // 2 = special
-		$xcrud->create_action('add_to_ubosot', 'ubosot_action'); // action callback, function ubosot_action() in functions.php
-		$xcrud->button('#', 'เพิ่มรายชื่อลงอุโบสถ', 'glyphicon glyphicon-plus-sign', 'xcrud-action btn-success',
-			array(  // set action vars to the button
-				'data-task' => 'action',
-				'data-action' => 'add_to_ubosot',
-				'data-primary' => '{bhikkhu_id}')
-		);
+	if (in_array(2, $_SESSION['jigowatt']['user_level']) || in_array(3, $_SESSION['jigowatt']['user_level'])) { // 2 = special, 3 = only add role
+
+		if (@$_GET['mode'] != "print") {
+			$xcrud->create_action('add_to_ubosot', 'ubosot_action'); // action callback, function ubosot_action() in functions.php
+			$xcrud->button('#', 'เพิ่มรายชื่อลงอุโบสถ', 'glyphicon glyphicon-plus-sign', 'xcrud-action btn-success',
+				array(  // set action vars to the button
+					'data-task' => 'action',
+					'data-action' => 'add_to_ubosot',
+					'data-primary' => '{bhikkhu_id}')
+			);
+		}
 	}
 
 	if (in_array(3, $_SESSION['jigowatt']['user_level'])) { // 3 = only add role
@@ -128,6 +139,13 @@
 		$xcrud->unset_add();
 		$xcrud->unset_edit();
 		$xcrud->unset_remove();
+	}
+
+	if (@$_GET['mode'] == "print") { //พิมพ์รายงาน (ติดบอร์ด)
+		$xcrud->unset_add();
+		$xcrud->unset_edit();
+		$xcrud->unset_remove();
+		$xcrud->unset_view();
 	}
 
 //	$xcrud->benchmark(true); // วัดประสิทธิภาพความเร็วในการรันหน้านี้
@@ -265,6 +283,11 @@
 
 ?>
 
+<?php
+	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
+		include("report-bhikkhu.php");
+	endif;
+?>
 <script src="../../vendors/input-mask/jquery.inputmask.js"></script>
 <script src="../../vendors/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script>

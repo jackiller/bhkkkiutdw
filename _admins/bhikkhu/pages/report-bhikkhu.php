@@ -67,5 +67,5 @@ div#button_center {
 </style>
 
 <div id="button_center">
-	<a href="../../report-list.php" class="button" target="_blank"><span>พิมพ์รายนามภิกขุ-สามเณร</span></a>
+	<a href="../../report-list.php" class="button" target="_blank"><span>พิมพ์รายนามภิกขุ-สามเณร (ติดบอร์ด)</span></a>
 </div>

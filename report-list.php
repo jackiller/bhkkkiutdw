@@ -38,7 +38,7 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -48,7 +48,7 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 

@@ -1,4 +1,5 @@
 <?php include("report-bhikkhu-ubosot.php"); ?>
+
 <?php
 	require("../../xcrud/functions.php");
 
@@ -15,7 +16,7 @@
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->join('bhikkhu_id','tbl_temp_ubosot','bhikkhu_id', 'b');
-	$xcrud->table_name('รายนามภิกขุ-สามเณรลงอุโบสถ');
+	$xcrud->table_name('พิมพ์รายนามภิกขุ-สามเณร (ลงอุโบสถ)');
 
 
 	// ต้องการให้ field search ตอน inner join เป็น drop down ให้เลือกได้ให้ใช้คำสั่งด้านล่างนี้ ( !!! ปิดคำสั่ง $xcrud->relation ออกด้วย !!!)
@@ -29,7 +30,7 @@
 	$xcrud->change_type('status_id','select', true, array('values'=>$arr_data)); // ทำให้ช่อง search เป็น dropdown
 
 	unset($arr_data);
-	$arr_data = render_array_dropdown('tbl_position', 'position_id', 'position_desc'); // ตาราง master
+	$arr_data = render_array_dropdown('tbl_position_extra', 'position_extra_id', 'position_extra_desc'); // ตาราง master
 	$xcrud->change_type('position_extra_id','select', '', array('values'=>$arr_data)); // ทำให้ช่อง search เป็น dropdown
 	//<---
 
@@ -73,7 +74,7 @@
 	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100));
 
 	if (in_array(3, $_SESSION['jigowatt']['user_level'])) { // 3 = only add role
-		$xcrud->unset_remove();
+		//$xcrud->unset_remove();
 	}
 
 	if (in_array(4, $_SESSION['jigowatt']['user_level'])) { // 4 = only view role
@@ -97,11 +98,13 @@
 
 ?>
 
-<?php if (in_array(2, $_SESSION['jigowatt']['user_level'])) : // 2 = special ?>
+<?php if ( (in_array(2, $_SESSION['jigowatt']['user_level'])) || (in_array(3, $_SESSION['jigowatt']['user_level'])) ) : // 2 = special, 3 = only add role  ?>
 <form action="" method="POST">
 	<input type="submit" name="BTTclear" id="BTTclear" value="ล้างรายการลงอุโบสถ" class="btn btn-danger xcrud-action" />
 </form>
 <?php endif; ?>
+
+<?php include("report-bhikkhu-ubosot.php"); ?>
 
 <script>
 	$( document ).ready(function() {

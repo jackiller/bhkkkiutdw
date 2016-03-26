@@ -67,5 +67,5 @@ div#button_center {
 </style>
 
 <div id="button_center">
-	<a href="../../report-list-ubosot.php" class="button" target="_blank"><span>พิมพ์รายนามภิกขุ-สามเณรลงอุโบสถ</span></a>
+	<a href="../../report-list-ubosot.php" class="button" target="_blank"><span>พิมพ์รายนามภิกขุ-สามเณร (ลงอุโบสถ)</span></a>
 </div>
