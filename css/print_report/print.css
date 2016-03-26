@@ -129,11 +129,11 @@ table td img{
 }
 
 .td-width-100{
-	width:20%; height:80px;vertical-align:text-bottom; 
+	width:20%; height:80px;vertical-align:text-bottom;
 }
 
 .td-width-10{
-	width:8%;font-weight: bold; font-size:34pt;
+	width:8%;font-weight: normal; font-size:30pt;
 }
 .font-small{ font-size:10pt}
 .font-smaller{ font-size:9pt}

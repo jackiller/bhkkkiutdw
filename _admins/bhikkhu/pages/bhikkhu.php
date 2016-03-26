@@ -1,19 +1,42 @@
 <?php
+	require("../../xcrud/functions.php");
+
 	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
 		include("report-bhikkhu.php");
 	endif;
+
+	// คำนวณอายุและพรรษา เพื่อเก็บลง db ก่อน (แกไขกรณีถ้าไม่มีเก็บอายุและพรรษาลง db แล้วไปคำนวณตอน real time เราจะไม่สามารถ sort field อายุและพรรษาจาก xcrud ได้)
+	$db = Xcrud_db::get_instance(); // ถ้ามี operation ที่ต้องทำกับ db ให้สร้าง instance db ขึ้นมาก่อน
+	$query = "SELECT * FROM tbl_bhikkhu";
+	$db->query($query);
+
+	//----> กรณี query ออกมาแล้วได้หลายแถว
+	$rows = $db->result(); // ออกมาหลายแถวให้ใช้ $db->result()
+	$count = count($rows); // นับจำนวนแถวที่ query ออกมาได้
+	foreach ($rows as $key => $row) {
+		// คำนวณพรรษา
+		//!!! สามเณรไม่มีพรรษา ให้คืนค่าว่างออกไป
+		$phansa_year = _calculate_phansa($row["ordinate"]);
+		if ($row["phansa_year"] != $phansa_year) { // ถ้าพรรษาที่คำนวณกับที่พรรษาที่เก็บใน db ไม่เท่ากัน ให้ update ค่าพรรษาที่คำนวณเข้า db
+			$query = 'UPDATE tbl_bhikkhu SET phansa_year = ' . (int)$phansa_year . ' WHERE bhikkhu_id = ' . (int)$row["bhikkhu_id"];
+			$db->query($query);
+		}
+
+		// คำนวณอายุ
+		$age_year = _calculate_age($row["birthday"]);
+		if ($row["age_year"] != $age_year) { // ถ้าอายุที่คำนวณกับที่อายุที่เก็บใน db ไม่เท่ากัน ให้ update ค่าอายุที่คำนวณเข้า db
+			$query = 'UPDATE tbl_bhikkhu SET age_year = ' . (int)$age_year . ' WHERE bhikkhu_id = ' . (int)$row["bhikkhu_id"];
+			$db->query($query);
+		}
+	}
 ?>
 
 <?php
-
-	require("../../xcrud/functions.php");
-
 	$xcrud = Xcrud::get_instance();
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->default_tab('ข้อมูลทั่วไป'); // ทำ nested table ให้เป็น tab
 
-	$db = Xcrud_db::get_instance(); // ถ้ามี operation ที่ต้องทำกับ db ให้สร้าง instance db ขึ้นมาก่อน
 
 	// กำหนดชื่อตาราง
 	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
@@ -47,11 +70,11 @@
 	$xcrud->change_type('position_extra_id','select', '', array('values'=>$arr_data)); // ทำให้ช่อง search เป็น dropdown
 	//<---
 
-	$xcrud->subselect('age',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
-	$xcrud->column_callback('age','calculate_age'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_age ในไฟล์ /xcrud/functions.php
+	//$xcrud->subselect('age',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
+	//$xcrud->column_callback('age','calculate_age'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_age ในไฟล์ /xcrud/functions.php
 
-	$xcrud->subselect('phansa',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
-	$xcrud->column_callback('phansa','calculate_phansa'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_phansa ในไฟล์ /xcrud/functions.php
+	//$xcrud->subselect('phansa',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
+	//$xcrud->column_callback('phansa','calculate_phansa'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_phansa ในไฟล์ /xcrud/functions.php
 
 	// กำหนดชื่อคอลัมน์
 	$xcrud->label(array(
@@ -71,22 +94,24 @@
 		'address' => 'ที่อยู่',
 		'status_id' => 'สถานะ',
 		'bhikkhu_opinion' => 'ความเห็นหมู่คณะต่อพฤติกรรม',
-		'age' => 'อายุ', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
-		'phansa' => 'พรรษา', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
+		'age_year' => 'อายุ',
+		'phansa_year' => 'พรรษา',
+		//'age' => 'อายุ', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
+		//'phansa' => 'พรรษา', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
 		'offence' => 'อาบัติหนัก'
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view
-	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id, offence');
+	$xcrud->columns('face_image, position_id, name, surname, nickname, age_year, alias, position_extra_id, ordinate, phansa_year, kuti, status_id, offence');
 	$xcrud->column_width('ordinate', '180px');
 	$xcrud->column_width('offence', '80px');
 
 	// ซ่อน field (หน้าเพิ่ม, หน้าแก้ไข)
-	$xcrud->fields("age, phansa, phansa_year", true);
+	//$xcrud->fields("age, phansa", true);
 
 	// disable field ไม่ให้แก้ไขได้ในหน้า edit และหน้า add
-	//$xcrud->disabled_on_edit('phansa_year');
-	//$xcrud->readonly_on_create('phansa_year');
+	$xcrud->disabled_on_edit('age_year, phansa_year');
+	$xcrud->readonly_on_create('age_year, phansa_year');
 
 	// เปลี่ยนคอลัมน์เป็น textarea (หน้าเพิ่ม, หน้าแก้ไข)
 	$xcrud->change_type('address, bhikkhu_opinion','textarea');

@@ -16,7 +16,7 @@ $pagedata = array(
         'title_1' => 'พิมพ์รายงาน (ลงอุโบสถ)',
         'description' => 'พิมพ์รายงาน (ลงอุโบสถ)',
         'filename' => 'ubosot.php',
-		'my_custom_param_1' => ''),
+		'my_custom_param_1' => 'print'),
 
     'blank_0' => array(
         'title_1' => '',

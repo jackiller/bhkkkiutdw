@@ -307,6 +307,24 @@ function update_history_data($postdata, $primary, $xcrud) {
 //			echo $row['history_id'];
 //		}
 
+		// คำนวณอายุและพรรษา
+		$query = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id = " . (int)$primary . " LIMIT 1";
+		$db->query($query);
+		//----> กรณี query ออกมาแล้วได้หลายแถว
+		$row = $db->row(); // ถ้ารู้ว่าออกมา 1 แถวแน่ ๆ ให้ใช้ $db->row()
+		if ($row) {
+			// คำนวณพรรษา
+			//!!! สามเณรไม่มีพรรษา ให้คืนค่าว่างออกไป
+			$phansa_year = _calculate_phansa($row["ordinate"]);
+			$query = 'UPDATE tbl_bhikkhu SET phansa_year = ' . (int)$phansa_year . ' WHERE bhikkhu_id = ' . (int)$primary;
+			$db->query($query);
+
+			// คำนวณอายุ
+			$age_year = _calculate_age($row["birthday"]);
+			$query = 'UPDATE tbl_bhikkhu SET age_year = ' . (int)$age_year . ' WHERE bhikkhu_id = ' . (int)$primary;
+			$db->query($query);
+		}
+
     }
 
 }
@@ -369,12 +387,12 @@ function calculate_phansa($value, $fieldname, $primary, $row, $xcrud) {
 	if ($row) {
 		// คำนวณพรรษา
 		//!!! สามเณรไม่มีพรรษา ให้คืนค่าว่างออกไป
-		$phansa_year = _calculate_phansa($row["ordinate"]);
-
-		if ($row["phansa_year"] != $phansa_year) { // ถ้าพรรษาที่คำนวณกับที่พรรษาที่เก็บใน db ไม่เท่ากัน ให้ update ค่าพรรษาที่คำนวณเข้า db
-			$query = 'UPDATE tbl_bhikkhu SET phansa_year = ' . (int)$phansa_year . ' WHERE bhikkhu_id = ' . (int)$primary;
-			$db->query($query);
-		}
+//		$phansa_year = _calculate_phansa($row["ordinate"]);
+//
+//		if ($row["phansa_year"] != $phansa_year) { // ถ้าพรรษาที่คำนวณกับที่พรรษาที่เก็บใน db ไม่เท่ากัน ให้ update ค่าพรรษาที่คำนวณเข้า db
+//			$query = 'UPDATE tbl_bhikkhu SET phansa_year = ' . (int)$phansa_year . ' WHERE bhikkhu_id = ' . (int)$primary;
+//			$db->query($query);
+//		}
 
 		return $phansa_year;
 	}

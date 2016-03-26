@@ -16,6 +16,7 @@
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->join('bhikkhu_id','tbl_temp_ubosot','bhikkhu_id', 'b');
+	//$xcrud->order_by('phansa_year', 'desc');
 	$xcrud->table_name('พิมพ์รายนามภิกขุ-สามเณร (ลงอุโบสถ)');
 
 
@@ -34,11 +35,11 @@
 	$xcrud->change_type('position_extra_id','select', '', array('values'=>$arr_data)); // ทำให้ช่อง search เป็น dropdown
 	//<---
 
-	$xcrud->subselect('age',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
-	$xcrud->column_callback('age','calculate_age'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_age ในไฟล์ /xcrud/functions.php
+	//$xcrud->subselect('age',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
+	//$xcrud->column_callback('age','calculate_age'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_age ในไฟล์ /xcrud/functions.php
 
-	$xcrud->subselect('phansa',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
-	$xcrud->column_callback('phansa','calculate_phansa'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_phansa ในไฟล์ /xcrud/functions.php
+	//$xcrud->subselect('phansa',1); // เพิ่มคอลัมน์ใหม่เข้ามา ซึ่งเป็นคอลัมน์ที่ไม่มีใน db table (ต้องวางคำสั่งนี้ไว้ก่อนจะใช้ $xcrud->label)
+	//$xcrud->column_callback('phansa','calculate_phansa'); // คอลัมน์ใหม่ที่เพิ่มเข้ามา call function calculate_phansa ในไฟล์ /xcrud/functions.php
 
 	// กำหนดชื่อคอลัมน์
 	$xcrud->label(array(
@@ -58,13 +59,15 @@
 		'address' => 'ที่อยู่',
 		'status_id' => 'สถานะ',
 		'bhikkhu_opinion' => 'ความเห็นหมู่คณะต่อพฤติกรรม',
-		'age' => 'อายุ', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
-		'phansa' => 'พรรษา', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
+		'age_year' => 'อายุ',
+		'phansa_year' => 'พรรษา',
+		//'age' => 'อายุ', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
+		//'phansa' => 'พรรษา', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
 		'offence' => 'อาบัติหนัก'
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view
-	$xcrud->columns('face_image, position_id, name, surname, nickname, age, alias, position_extra_id, ordinate, phansa, kuti, status_id');
+	$xcrud->columns('face_image, position_id, name, surname, nickname, age_year, alias, position_extra_id, ordinate, phansa_year, kuti, status_id');
 	$xcrud->column_width('ordinate', '180px');
 	$xcrud->column_width('offence', '80px');
 
@@ -91,7 +94,7 @@
     $xcrud->unset_print();
     $xcrud->unset_search();
     //$xcrud->unset_title();
-    $xcrud->unset_sortable();
+    //$xcrud->unset_sortable();
 
 	$xcrud->replace_remove('delete_data_tbl_temp_ubosot'); // replaces standard xcrud actions (remove) by custom function ใช้กรณี เอาตาราง a join ตาราง b แต่ตอนกดปุ่มลบถ้าเป็น standard มันจะลบให้ 2 ตารางเลย แต่เราต้องการลบแค่ตาราง a ตารางเดียว เลยต้องใข้ replace_remove
 	echo $xcrud->render();
