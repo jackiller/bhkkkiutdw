@@ -39,6 +39,7 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+	// position_id = 3 คือ สามเณร
 	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
@@ -49,7 +50,9 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year < 5 AND position_extra_id <> 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -59,7 +62,9 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year < 5 AND position_extra_id = 4 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -69,6 +74,7 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
+	// position_id = 3 คือ สามเณร
 	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 ORDER BY ordinate, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
@@ -99,7 +105,7 @@
 		$sqlCommand = "SELECT * FROM tbl_position WHERE position_id=" . $recordset->fields["position_id"] . " LIMIT 1";
 		$recordsetPosition = $objConn->Execute($sqlCommand);
 
-		$sqlCommand = "SELECT * FROM tbl_position WHERE position_id=" . $recordset->fields["position_extra_id"] . " LIMIT 1";
+		$sqlCommand = "SELECT * FROM tbl_position_extra WHERE position_extra_id=" . $recordset->fields["position_extra_id"] . " LIMIT 1";
 		$recordsetPositionExtra = $objConn->Execute($sqlCommand);
 
 		if ($i==0) { // ให้หน้าละ 11 แถว
@@ -114,8 +120,8 @@
 		<tr>
 		  <td class="td-width-10"><?php echo _thai_digit($i+1); ?></td>
 		  <?php
-			if ($recordsetPositionExtra->fields["position_desc"] != '') :
-				$recordsetPositionExtra = '(' . $recordsetPositionExtra->fields["position_desc"] . ')';
+			if ($recordsetPositionExtra->fields["position_extra_desc"] != '') :
+				$recordsetPositionExtra = '(' . $recordsetPositionExtra->fields["position_extra_desc"] . ')';
 			else:
 				$recordsetPositionExtra = '';
 			endif;
