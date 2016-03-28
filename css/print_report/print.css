@@ -1,7 +1,18 @@
-@page {
+/*@page {
   size: A3;
   margin: 0mm 2.5mm 0mm 2.5mm;
+}*/
+body {
+font: 14pt/24pt;
+color: #000;
+position: relative;
+padding: 0;
+outline: 0;
+border: 0;
+  size: A3;
+  margin: 0mm;
 }
+
 @font-face {
     font-family: 'THK2DJuly8';
     src: url('th_k2d_july8_bold_italic-webfont.eot');
@@ -58,15 +69,6 @@
 .name{font-size:17pt}
 
 
-body {
-font: 14pt/24pt;
-color: #000;
-position: relative;
-margin: 0 auto;
-padding: 0;
-outline: 0;
-border: 0;
-}
 .margintop{padding-top:10mm;}
 .endpage{page-break-before: always; }
 .page-break{ page-break-after: always;}
@@ -126,6 +128,12 @@ table td img{
 }
 .td-width-80{
 	width:13%; height:80px;vertical-align:text-bottom;
+}
+.td-width-90{
+	width:11%; height:80px;vertical-align:text-bottom;
+}
+.td-width-110{
+	width:14%; height:80px;vertical-align:text-bottom;
 }
 
 .td-width-100{

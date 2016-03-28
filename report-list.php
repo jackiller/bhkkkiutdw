@@ -100,7 +100,7 @@
 		if ($i==0) { // ให้หน้าละ 11 แถว
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
 		} elseif ($i%11 == 0) {
-			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot endpage margintop">';
+			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
 		}
@@ -165,7 +165,7 @@
 			<span class="block meaning">กุฏิ</span>
 		  </td>
 
-		  <td class="td-width-80">
+		  <td class="td-width-110">
 			<span class="block bolder name">
 			<?php
 				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีพรรษา
