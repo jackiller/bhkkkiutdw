@@ -85,6 +85,8 @@
 
 //------------------------------------> loop แสดงข้อมูล
 	$i = 0;
+	$j = 0;
+	$page1 = false;
 
 	foreach ($bhikkhu_sort as $key_id) :
 
@@ -99,8 +101,17 @@
 
 		if ($i==0) { // ให้หน้าละ 11 แถว
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
-		} elseif ($i%11 == 0) {
+		} elseif ($i%11 == 0 && $page1 == false) {
 			echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
+			$page1 = true;
+		} elseif ($page1 == true) {
+			$j = $j + 1;
+			if ($j == 12) {
+				echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
+				$j = 0;
+			} else {
+				echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
+			}
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
 		}
