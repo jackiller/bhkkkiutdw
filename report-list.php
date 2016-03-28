@@ -27,9 +27,9 @@
 <?php
 	$bhikkhu_sort = array();
 
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -38,22 +38,10 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
-	// position_id = 3 คือ สามเณร
-	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
-	$recordset = $objConn->Execute($sqlCommand);
-	$recordCount = $recordset->RecordCount();
-
-	while (!$recordset->EOF) :
-		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
-		$recordset->MoveNext();
-	endwhile;
-
-//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
 	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -62,9 +50,10 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
+//--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'ไม่มี' AND position_id = 3 ORDER BY ordinate, bhikkhu_id";
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -73,8 +62,19 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลพระที่อาบัติหนักทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามพรรษาจากมากไปน้อย
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'มี' ORDER BY phansa_year DESC, ordinate";
+//--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา) (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+	// position_id = 3 คือ สามเณร
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'ไม่มี' AND position_id = 3 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+//--------------------------------------> ดึงข้อมูลพระที่อาบัติหนักทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามพรรษาจากมากไปน้อย (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 

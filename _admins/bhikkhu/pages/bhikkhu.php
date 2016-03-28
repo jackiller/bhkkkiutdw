@@ -124,10 +124,19 @@
 	// image upload & resize & manual crop
 	// ถ้าต้องการตัดรูปขนาด 900x200 ให้เอา 900/200 จะได้ ratio = 4.5
 	// ในตัวอย่างนี้ต้องการ crop รูปขนาด 100x100 ให้เอา 100/100 ได้ ratio = 1 จากนั้นก็ให้ resize รูปลงเหลือขนาด 100x100 (width x height)
-	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100, 'manual_crop' => true));
+	// url ระบุ folder ที่เก็บรูป เพื่อทำให้แสดงรูปได้เร็วขึ้น (ถ้าไม่ระบุ ระบบจะดึงภาพแบบ ajax มาให้ ทำให้ช้า)
+	if (substr($_SERVER["HTTP_HOST"], 0, 9) == "localhost") {
+		$upload_path = 'http://localhost/bhikkhu.watnapp.com/uploads/';
+	} else {
+		$upload_path = 'http://bhikkhu.watnapp.com/uploads/';
+	}
+	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100, 'manual_crop' => true, 'url'=> $upload_path));
 
 	// ภิกษุอาบัติหนักให้แสดงแถวเป็นสีแดง ต้องมี field ในคำสั่ง $xcrud->columns();
 	$xcrud->highlight_row('offence', '=', 'มี', '#FFE6E6');
+	$xcrud->highlight_row('status_id', '=', 2, '#FFFFDC'); // ย้ายไปอยู่ที่อื่น
+	$xcrud->highlight_row('status_id', '=', 3, '#FFFFDC'); // ลาสิกขา
+	$xcrud->highlight_row('status_id', '=', 4, '#A09F9F'); // มรณภาพ
 
 	// ซ่อนปุ่ม standard (หน้าเพิ่ม, หน้าแก้ไข)
 	$xcrud->hide_button('save_new, save_edit');

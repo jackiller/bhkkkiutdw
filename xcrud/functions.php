@@ -415,6 +415,18 @@ function ubosot_action($xcrud) {
 				$xcrud->set_exception('', 'ไม่สามารถเพิ่มรายชื่อเพื่อลงอุโบสถได้เนื่องจาก อาบัติหนัก', 'error');
 				return;
 			}
+			if ($row['status_id'] == 2) { // ย้ายไปอยู่ที่อื่น
+				$xcrud->set_exception('', 'ไม่สามารถเพิ่มรายชื่อเพื่อลงอุโบสถได้เนื่องจาก ย้ายไปอยู่ที่อื่น', 'error');
+				return;
+			}
+			if ($row['status_id'] == 3) { // ลาสิกขา
+				$xcrud->set_exception('', 'ไม่สามารถเพิ่มรายชื่อเพื่อลงอุโบสถได้เนื่องจาก ลาสิกขา', 'error');
+				return;
+			}
+			if ($row['status_id'] == 4) { // มรณภาพ
+				$xcrud->set_exception('', 'ไม่สามารถเพิ่มรายชื่อเพื่อลงอุโบสถได้เนื่องจาก มรณภาพ', 'error');
+				return;
+			}
 		}
 
 		$query = 'SELECT * FROM tbl_temp_ubosot WHERE bhikkhu_id =' . $xcrud->get('primary') . ' LIMIT 1';
