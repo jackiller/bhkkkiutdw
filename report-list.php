@@ -100,7 +100,7 @@
 		if ($i==0) { // ให้หน้าละ 11 แถว
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
 		} elseif ($i%11 == 0) {
-			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
+			echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
 		}
