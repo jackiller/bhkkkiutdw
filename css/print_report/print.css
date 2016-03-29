@@ -15,7 +15,7 @@ margin: 0mm;
 .endpage{page-break-before: always; }
 .page-break{ page-break-after: always;}
 
-.margintop{margin-top:20mm;}
+.margintop{margin-top:10mm;}
 
 .text_white{ color:#FFF}
 .red{color:red; /*font-size:9pt*/}
