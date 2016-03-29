@@ -38,6 +38,31 @@
 		$recordset->MoveNext();
 	endwhile;
 
+//--------------------------------------> ดึงข้อมูลพระ 2 รูปที่มีอายุพรรษา >= 5 ปี (ไม่รวมทั้งอาคันตุกะ) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+    // ตอนลงอุโบสถกฎคือ ต้องมีพระวัดนานำมาก่อน 2 รูป (ไม่เอาพระที่เป็นอาคันตุกะ ถึงจะมีพรรษามากกว่าพระวัดนาก็ตาม)
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year >= 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate LIMIT 2";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+	unset($arr_ubosot); // clear array
+
+	// ดึง id ภิกขุที่จะลงอุโบสถออกมาทั้งหมด โดยไม่เอา 2 รูปแรกที่ได้จาก logic ข้างต้น
+	$sqlCommand = "SELECT * FROM tbl_temp_ubosot WHERE bhikkhu_id NOT IN (" . implode(',', $bhikkhu_sort) . ")";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$arr_ubosot[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก)
 	// position_id = 3 คือ สามเณร
 	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' ORDER BY phansa_year DESC, ordinate";

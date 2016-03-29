@@ -18,6 +18,12 @@ $pagedata = array(
         'filename' => 'ubosot.php',
 		'my_custom_param_1' => 'print'),
 
+    'form-regis' => array(
+        'title_1' => 'พิมพ์ฟอร์มกรอกข้อมูล',
+        'description' => 'พิมพ์ฟอร์มกรอกข้อมูล',
+        'filename' => 'form-regis.php',
+		'my_custom_param_1' => 'print'),
+
     'blank_0' => array(
         'title_1' => '',
         'description' => '',

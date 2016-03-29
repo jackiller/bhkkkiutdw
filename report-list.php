@@ -26,10 +26,25 @@
 <h2 class="h2">วัดนาป่าพง</h2>
 <?php
 	$bhikkhu_sort = array();
+	$arr_ubosot = array();
+
+//--------------------------------------> ดึงข้อมูลพระ 2 รูปที่มีอายุพรรษา >= 5 ปี (ไม่รวมทั้งอาคันตุกะ) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+    // ตอนลงอุโบสถกฎคือ ต้องมีพระวัดนานำมาก่อน 2 รูป (ไม่เอาพระที่เป็นอาคันตุกะ ถึงจะมีพรรษามากกว่าพระวัดนาก็ตาม)
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 AND position_id <> 3 AND position_extra_id <> 1 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate LIMIT 2";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$arr_ubosot[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
 
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา >= 5 ปี (รวมทั้งอาคันตุกะด้วย) ขึ้นไปมาแสดงก่อน เรียงลำดับตามพรรษาจากมากไปน้อย (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND phansa_year >= 5 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -41,7 +56,7 @@
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
 	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND phansa_year < 5 AND position_extra_id <> 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -53,7 +68,17 @@
 //--------------------------------------> ดึงข้อมูลพระทั้งหมดที่มีอายุพรรษา < 5 ปี และเป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป (ไม่เอาสามเณร, ไม่เอาพระที่อาบัติหนัก, ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
 	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND phansa_year < 5 AND position_extra_id = 1 AND position_id <> 3 AND offence = 'ไม่มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+//--------------------------------------> ดึงข้อมูลพระที่อาบัติหนักทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามพรรษาจากมากไปน้อย (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND offence = 'มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -64,17 +89,7 @@
 
 //--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา) (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'ไม่มี' AND position_id = 3 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
-	$recordset = $objConn->Execute($sqlCommand);
-	$recordCount = $recordset->RecordCount();
-
-	while (!$recordset->EOF) :
-		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
-		$recordset->MoveNext();
-	endwhile;
-
-//--------------------------------------> ดึงข้อมูลพระที่อาบัติหนักทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามพรรษาจากมากไปน้อย (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE offence = 'มี' AND status_id NOT IN (2, 3, 4) ORDER BY phansa_year DESC, ordinate";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND offence = 'ไม่มี' AND position_id = 3 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -84,6 +99,7 @@
 	endwhile;
 
 //------------------------------------> loop แสดงข้อมูล
+
 	$i = 0;
 	$j = 0;
 	$page1 = false;
