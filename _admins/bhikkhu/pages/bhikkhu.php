@@ -108,6 +108,7 @@
 
 	// ซ่อน field (หน้าเพิ่ม, หน้าแก้ไข)
 	//$xcrud->fields("age, phansa", true);
+	$xcrud->fields("ordering", true);
 
 	// disable field ไม่ให้แก้ไขได้ในหน้า edit และหน้า add
 	$xcrud->disabled_on_edit('age_year, phansa_year');

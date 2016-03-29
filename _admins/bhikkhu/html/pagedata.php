@@ -19,8 +19,8 @@ $pagedata = array(
 		'my_custom_param_1' => 'print'),
 
     'form-regis' => array(
-        'title_1' => 'พิมพ์ฟอร์มกรอกข้อมูล',
-        'description' => 'พิมพ์ฟอร์มกรอกข้อมูล',
+        'title_1' => 'แบบกรอกข้อมูลประวัติภิกขุ',
+        'description' => 'แบบกรอกข้อมูลประวัติภิกขุ',
         'filename' => 'form-regis.php',
 		'my_custom_param_1' => 'print'),
 

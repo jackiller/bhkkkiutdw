@@ -74,7 +74,13 @@
 	// image upload & resize & manual crop
 	// ถ้าต้องการตัดรูปขนาด 900x200 ให้เอา 900/200 จะได้ ratio = 4.5
 	// ในตัวอย่างนี้ต้องการ crop รูปขนาด 100x100 ให้เอา 100/100 ได้ ratio = 1 จากนั้นก็ให้ resize รูปลงเหลือขนาด 100x100 (width x height)
-	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100));
+	// url ระบุ folder ที่เก็บรูป เพื่อทำให้แสดงรูปได้เร็วขึ้น (ถ้าไม่ระบุ ระบบจะดึงภาพแบบ ajax มาให้ ทำให้ช้า)
+	if (substr($_SERVER["HTTP_HOST"], 0, 9) == "localhost") {
+		$upload_path = 'http://localhost/bhikkhu.watnapp.com/uploads/';
+	} else {
+		$upload_path = 'http://bhikkhu.watnapp.com/uploads/';
+	}
+	$xcrud->change_type('face_image', 'image', '', array('ratio' => 1, 'width' => 100, 'height' => 100, 'url'=> $upload_path));
 
 	if (in_array(3, $_SESSION['jigowatt']['user_level'])) { // 3 = only add role
 		//$xcrud->unset_remove();

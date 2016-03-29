@@ -68,5 +68,5 @@ div#button_center {
 
 <div id="button_center">
 	<p>&nbsp;</p>
-	<a href="../../form-regis.html" class="button" target="_blank"><span>พิมพ์ฟอร์มกรอกข้อมูล</span></a>
+	<a href="../../form-regis.html" class="button" target="_blank"><span>แบบกรอกข้อมูลประวัติภิกขุ</span></a>
 </div>
