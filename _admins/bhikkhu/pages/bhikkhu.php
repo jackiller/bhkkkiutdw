@@ -35,6 +35,7 @@
 	$xcrud = Xcrud::get_instance();
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
+	$xcrud->order_by('ordering');
 	$xcrud->default_tab('ข้อมูลทั่วไป'); // ทำ nested table ให้เป็น tab
 
 
@@ -151,6 +152,21 @@
 	// แต่ถ้าต้องการ custom message error เอง ให้เราใช้ callback function เช่น $xcrud->before_insert()
 	// ซึ่งตัว callback จะมีข้อเสียคือเมื่อระบบมีการ upload รูปภาพแบบ crop ได้ เวลาที่ user เลือกรูป crop แล้วเกิดใส่ข้อมูลใน field อื่น ๆ ไม่ครบหรือไม่ได้ใส่ พอกด submit รูปภาพที่ crop ไว้จะหายไป (เพราะมัน check ที่ server side จะมีการ refresh page เป็นผลให้ภาพหายไป)
 	// ซึ่งตรงนี้ยังหาวิธีแก้ไขไม่ได้ เลยจำเป็นต้องใช้ validation_required, validation_pattern แทนไปก่อน
+
+	// ปุ่มเลื่อนลำดับขึ้นลง
+	if (in_array(2, $_SESSION['jigowatt']['user_level'])) { // 2 = special
+		$xcrud->create_action('movetop_bhikkhu', 'movetop_bhikkhu'); // action callback, function ubosot_action() in functions.php
+		$xcrud->button('#', "Move Top", 'glyphicon glyphicon-arrow-up icon-arrow-up', 'btn xcrud-action', array(
+			'data-action' => 'movetop_bhikkhu',
+			'data-task' => 'action',
+			'data-primary' => '{bhikkhu_id}'));
+
+		$xcrud->create_action('movebottom_bhikkhu', 'movebottom_bhikkhu'); // action callback, function ubosot_action() in functions.php
+		$xcrud->button('#', "Move Bottom", 'glyphicon glyphicon-arrow-down icon-arrow-down', 'btn xcrud-action', array(
+			'data-action' => 'movebottom_bhikkhu',
+			'data-task' => 'action',
+			'data-primary' => '{bhikkhu_id}'));
+	}
 
 	// เพิ่มปุ่ม action เพิ่มรายชื่อพระที่จะลงอุโบสถ
 	if (in_array(2, $_SESSION['jigowatt']['user_level']) || in_array(3, $_SESSION['jigowatt']['user_level'])) { // 2 = special, 3 = only add role

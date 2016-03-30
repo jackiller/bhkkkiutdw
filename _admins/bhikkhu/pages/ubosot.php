@@ -16,7 +16,7 @@
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->join('bhikkhu_id','tbl_temp_ubosot','bhikkhu_id', 'b');
-	//$xcrud->order_by('phansa_year', 'desc');
+	$xcrud->order_by('ordering');
 	$xcrud->table_name('พิมพ์รายนามภิกขุ-สามเณร (ลงอุโบสถ)');
 
 

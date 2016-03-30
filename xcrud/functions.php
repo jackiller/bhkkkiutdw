@@ -484,6 +484,69 @@ function format_date_before_edit($row_data, $primary, $xcrud) {
 
 }
 
+function movetop_bhikkhu($xcrud)
+{
+    if ($xcrud->get('primary') !== false)
+    {
+        $db = Xcrud_db::get_instance();
+
+        $primary = (int)$xcrud->get('primary');
+        $query = 'SELECT `bhikkhu_id` FROM `tbl_bhikkhu` ORDER BY `ordering`,`bhikkhu_id`';
+        $db->query($query);
+
+        $result = $db->result();
+        $count = count($result);
+
+        $sort = array();
+        foreach ($result as $key => $item)
+        {
+            if ($item['bhikkhu_id'] == $primary && $key != 0)
+            {
+                array_splice($result, $key - 1, 0, array($item));
+                unset($result[$key + 1]);
+                break;
+            }
+        }
+
+        foreach ($result as $key => $item)
+        {
+            $query = 'UPDATE `tbl_bhikkhu` SET `ordering` = ' . $key . ' WHERE bhikkhu_id = ' . $item['bhikkhu_id'];
+            $db->query($query);
+        }
+    }
+}
+
+function movebottom_bhikkhu($xcrud)
+{
+    if ($xcrud->get('primary') !== false)
+    {
+        $db = Xcrud_db::get_instance();
+
+        $primary = (int)$xcrud->get('primary');
+        $query = 'SELECT `bhikkhu_id` FROM `tbl_bhikkhu` ORDER BY `ordering`,`bhikkhu_id`';
+        $db->query($query);
+
+        $result = $db->result();
+        $count = count($result);
+
+        $sort = array();
+        foreach ($result as $key => $item)
+        {
+            if ($item['bhikkhu_id'] == $primary && $key != $count - 1)
+            {
+                unset($result[$key]);
+                array_splice($result, $key + 1, 0, array($item));
+                break;
+            }
+        }
+
+        foreach ($result as $key => $item)
+        {
+            $query = 'UPDATE `tbl_bhikkhu` SET `ordering` = ' . $key . ' WHERE bhikkhu_id = ' . $item['bhikkhu_id'];
+            $db->query($query);
+        }
+    }
+}
 
 //***************************************************************************************************
 //*                                 CUSTOM PRIVATE FUNCTION                                         *
