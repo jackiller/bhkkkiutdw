@@ -323,6 +323,20 @@ function update_history_data($postdata, $primary, $xcrud) {
 			$age_year = _calculate_age($row["birthday"]);
 			$query = 'UPDATE tbl_bhikkhu SET age_year = ' . (int)$age_year . ' WHERE bhikkhu_id = ' . (int)$primary;
 			$db->query($query);
+
+		}
+
+		// set ลำดับ ordering กรณีเพิ่มข้อมูลเข้ามาใหม่
+		if ($row["ordering"] == NULL) {
+			$query = "SELECT * FROM tbl_bhikkhu ORDER BY ordering DESC LIMIT 1";
+			$db->query($query);
+			//----> กรณี query ออกมาแล้วได้หลายแถว
+			$row = $db->row(); // ถ้ารู้ว่าออกมา 1 แถวแน่ ๆ ให้ใช้ $db->row()
+			if ($row) {
+				$ordering = $row["ordering"] + 1;
+				$query = 'UPDATE tbl_bhikkhu SET ordering = ' . (int)$ordering . ' WHERE bhikkhu_id = ' . (int)$primary;
+				$db->query($query);
+			}
 		}
 
     }
