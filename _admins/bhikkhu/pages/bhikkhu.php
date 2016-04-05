@@ -1,7 +1,7 @@
 <?php
 	require("../../xcrud/functions.php");
 
-	if (@$_GET['mode'] == "print") : //พิมพ์รายงาน (ติดบอร์ด)
+	if (@$_GET['mode'] == "print") : //เมนูพิมพ์รายงาน (ติดบอร์ด)
 		include("report-bhikkhu.php");
 	endif;
 
@@ -35,6 +35,11 @@
 	$xcrud = Xcrud::get_instance();
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
+	if (@$_GET['mode'] == "print") { //เมนูพิมพ์รายงาน (ติดบอร์ด)
+		//$xcrud->where("offence=", "ไม่มี");
+		//$xcrud->where("status_id !", array('2','3','4')); // using IN
+		$xcrud->where("status_id !", array('2','3','4')); // using NOT IN
+	}
 	$xcrud->order_by('ordering');
 	$xcrud->default_tab('ข้อมูลทั่วไป'); // ทำ nested table ให้เป็น tab
 

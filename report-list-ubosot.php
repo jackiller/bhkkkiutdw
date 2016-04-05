@@ -164,8 +164,8 @@
 		  <td class="td-width-50">
 			<span class="block name">
 			<?php
-				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีฉายา
-					echo "&nbsp;";
+				if ($recordset->fields["position_id"] == 3) { // สามเณรไม่มีฉายา ใช้นามสกุลแทน
+					echo $recordset->fields["surname"];
 				} else {
 					echo $recordset->fields["alias"];
 				}
