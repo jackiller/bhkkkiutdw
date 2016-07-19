@@ -345,6 +345,7 @@ var Xcrud = {
 						firstDay: Xcrud.config('date_first_day'),
 						changeMonth: true,
 						changeYear: true,
+						showButtonPanel: true,	//*9-> add
 						onClose: function(selectedDate) {
 							var range_start = element.data("rangestart");
 							var range_end = element.data("rangeend");
