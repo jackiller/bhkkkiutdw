@@ -45,7 +45,13 @@
 		//$xcrud->where("status_id !", array('2','3','4')); // using IN
 		$xcrud->where("status_id !", array('2','3','4')); // using NOT IN
 	}
+
+	// เรียงลำดับ ตาม status_id ก่อน จากนั้นเรียงด้วย phansa_year ต่อจากนั้นเรียงด้วย ordinate (วันอุปสมบท)
+	$xcrud->order_by('status_id');
+	$xcrud->order_by('phansa_year', 'desc');
+	$xcrud->order_by('ordinate');
 	$xcrud->order_by('ordering');
+
 	$xcrud->default_tab('ข้อมูลทั่วไป'); // ทำ nested table ให้เป็น tab
 
 
@@ -166,19 +172,19 @@
 	// ซึ่งตรงนี้ยังหาวิธีแก้ไขไม่ได้ เลยจำเป็นต้องใช้ validation_required, validation_pattern แทนไปก่อน
 
 	// ปุ่มเลื่อนลำดับขึ้นลง
-	if (in_array(2, $_SESSION['jigowatt']['user_level'])) { // 2 = special
-		$xcrud->create_action('movetop_bhikkhu', 'movetop_bhikkhu'); // action callback, function ubosot_action() in functions.php
-		$xcrud->button('#', "Move Top", 'glyphicon glyphicon-arrow-up icon-arrow-up', 'btn xcrud-action', array(
-			'data-action' => 'movetop_bhikkhu',
-			'data-task' => 'action',
-			'data-primary' => '{bhikkhu_id}'));
-
-		$xcrud->create_action('movebottom_bhikkhu', 'movebottom_bhikkhu'); // action callback, function ubosot_action() in functions.php
-		$xcrud->button('#', "Move Bottom", 'glyphicon glyphicon-arrow-down icon-arrow-down', 'btn xcrud-action', array(
-			'data-action' => 'movebottom_bhikkhu',
-			'data-task' => 'action',
-			'data-primary' => '{bhikkhu_id}'));
-	}
+//	if (in_array(2, $_SESSION['jigowatt']['user_level'])) { // 2 = special
+//		$xcrud->create_action('movetop_bhikkhu', 'movetop_bhikkhu'); // action callback, function ubosot_action() in functions.php
+//		$xcrud->button('#', "Move Top", 'glyphicon glyphicon-arrow-up icon-arrow-up', 'btn xcrud-action', array(
+//			'data-action' => 'movetop_bhikkhu',
+//			'data-task' => 'action',
+//			'data-primary' => '{bhikkhu_id}'));
+//
+//		$xcrud->create_action('movebottom_bhikkhu', 'movebottom_bhikkhu'); // action callback, function ubosot_action() in functions.php
+//		$xcrud->button('#', "Move Bottom", 'glyphicon glyphicon-arrow-down icon-arrow-down', 'btn xcrud-action', array(
+//			'data-action' => 'movebottom_bhikkhu',
+//			'data-task' => 'action',
+//			'data-primary' => '{bhikkhu_id}'));
+//	}
 
 	// เพิ่มปุ่ม action เพิ่มรายชื่อพระที่จะลงอุโบสถ
 	if (in_array(2, $_SESSION['jigowatt']['user_level']) || in_array(3, $_SESSION['jigowatt']['user_level'])) { // 2 = special, 3 = only add role
