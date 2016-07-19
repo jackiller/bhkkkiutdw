@@ -87,9 +87,22 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา) (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+//--------------------------------------> ดึงข้อมูลสามเณรที่ไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา) (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND offence = 'ไม่มี' AND position_id = 3 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id <> 1 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+//--------------------------------------> ดึงข้อมูลสามเณรที่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา) (ไม่เอาไปอยู่ที่อื่น, ไม่เอาลาสิกขา, ไม่เอามรณภาพ)
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id NOT IN (" . implode(',', $arr_ubosot) . ") AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id = 1 AND status_id NOT IN (2, 3, 4) ORDER BY ordinate, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 

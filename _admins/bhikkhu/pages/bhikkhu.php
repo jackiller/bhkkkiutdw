@@ -15,8 +15,13 @@
 	$count = count($rows); // นับจำนวนแถวที่ query ออกมาได้
 	foreach ($rows as $key => $row) {
 		// คำนวณพรรษา
-		//!!! สามเณรไม่มีพรรษา ให้คืนค่าว่างออกไป
-		$phansa_year = _calculate_phansa($row["ordinate"]);
+		//!!! สามเณรไม่มีพรรษา หรือ ภิกขุที่ลาสิกขาไปแล้ว ให้คืนค่า 0 ออกไป
+		if ($row["position_id"] == 3 || $row["status_id"] == 3) {
+			$phansa_year = 0;
+		} else {
+			$phansa_year = _calculate_phansa($row["ordinate"]);
+		}
+
 		if ($row["phansa_year"] != $phansa_year) { // ถ้าพรรษาที่คำนวณกับที่พรรษาที่เก็บใน db ไม่เท่ากัน ให้ update ค่าพรรษาที่คำนวณเข้า db
 			$query = 'UPDATE tbl_bhikkhu SET phansa_year = ' . (int)$phansa_year . ' WHERE bhikkhu_id = ' . (int)$row["bhikkhu_id"];
 			$db->query($query);
@@ -104,7 +109,9 @@
 		'phansa_year' => 'พรรษา',
 		//'age' => 'อายุ', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
 		//'phansa' => 'พรรษา', // column นี้ไม่มีใน db ใช้คำสั่ง subselect เพิ่มเข้ามาเอง
-		'offence' => 'อาบัติหนัก'
+		'offence' => 'อาบัติหนัก',
+		'fair' => 'นักธรรม',
+		'graduate' => 'เปรียญ'
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view

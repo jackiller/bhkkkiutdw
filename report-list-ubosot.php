@@ -98,9 +98,22 @@
 		$recordset->MoveNext();
 	endwhile;
 
-//--------------------------------------> ดึงข้อมูลสามเณรทั้งหมด มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
+//--------------------------------------> ดึงข้อมูลสามเณรที่ไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
 	// position_id = 3 คือ สามเณร
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 ORDER BY ordinate, bhikkhu_id";
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id <> 1 ORDER BY ordinate, bhikkhu_id";
+	$recordset = $objConn->Execute($sqlCommand);
+	$recordCount = $recordset->RecordCount();
+
+	while (!$recordset->EOF) :
+		$bhikkhu_sort[] = $recordset->fields["bhikkhu_id"];
+		$recordset->MoveNext();
+	endwhile;
+
+//--------------------------------------> ดึงข้อมูลสามเณรที่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
+	// position_id = 3 คือ สามเณร
+	// position_extra_id = 1 คือ อาคันตุกะ
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id = 1 ORDER BY ordinate, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -121,6 +134,8 @@
 
 //------------------------------------> loop แสดงข้อมูล
 	$i = 0;
+	$j = 0;
+	$page1 = false;
 
 	foreach ($bhikkhu_sort as $key_id) :
 
@@ -135,8 +150,17 @@
 
 		if ($i==0) { // ให้หน้าละ 11 แถว
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
-		} elseif ($i%11 == 0) {
-			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot endpage margintop">';
+		} elseif ($i%11 == 0 && $page1 == false) {
+			echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
+			$page1 = true;
+		} elseif ($page1 == true) {
+			$j = $j + 1;
+			if ($j == 12) {
+				echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
+				$j = 0;
+			} else {
+				echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
+			}
 		} else {
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-foot">';
 		}
