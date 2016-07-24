@@ -99,9 +99,9 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลสามเณรที่ไม่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
-	// position_id = 3 คือ สามเณร
+	// position_id = 3 คือ สามเณร (field ordinate_second คือวันบรรพชาสามเณร)
 	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id <> 1 ORDER BY ordinate, bhikkhu_id";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id <> 1 ORDER BY ordinate_second, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -111,9 +111,9 @@
 	endwhile;
 
 //--------------------------------------> ดึงข้อมูลสามเณรที่เป็นอาคันตุกะ มาแสดงเป็นลำดับต่อไป มาแสดงเป็นลำดับต่อไป เรียงตามวันที่อุปสมบท (สามเณรไม่มีพรรษา)
-	// position_id = 3 คือ สามเณร
+	// position_id = 3 คือ สามเณร (field ordinate_second คือวันบรรพชาสามเณร)
 	// position_extra_id = 1 คือ อาคันตุกะ
-	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id = 1 ORDER BY ordinate, bhikkhu_id";
+	$sqlCommand = "SELECT * FROM tbl_bhikkhu WHERE bhikkhu_id IN (" . implode(',', $arr_ubosot) . ")" . " AND offence = 'ไม่มี' AND position_id = 3 AND position_extra_id = 1 ORDER BY ordinate_second, bhikkhu_id";
 	$recordset = $objConn->Execute($sqlCommand);
 	$recordCount = $recordset->RecordCount();
 
@@ -148,14 +148,14 @@
 		$sqlCommand = "SELECT * FROM tbl_position_extra WHERE position_extra_id=" . $recordset->fields["position_extra_id"] . " LIMIT 1";
 		$recordsetPositionExtra = $objConn->Execute($sqlCommand);
 
-		if ($i==0) { // ให้หน้าละ 11 แถว
+		if ($i==0) { // แถวแรกสุดของหน้า 1 (ให้หน้าละ 11 แถว)
 			echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot">';
-		} elseif ($i%11 == 0 && $page1 == false) {
+		} elseif ($i%11 == 0 && $page1 == false) { // หน้าแรกและเป็นแถวสุดท้ายก่อนขึ้นหน้าใหม่ (ให้หน้าละ 11 แถว)
 			echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
 			$page1 = true;
-		} elseif ($page1 == true) {
+		} elseif ($page1 == true) { // หน้าอื่นที่ไม่ใช่หน้า 1
 			$j = $j + 1;
-			if ($j == 12) {
+			if ($j == 12) { // แถวสุดท้ายของหน้าอื่นที่ไม่ใช่หน้า 1 (ให้ปน้าอื่นที่ไม่ใช่หน้า 1 แสดงได้ 12 แถวภายใน 1 หน้า)
 				echo '<div class="page-break"></div><table width="100%" border="0" cellspacing="0" cellpadding="0" class="td-border-top td-border-foot margintop">';
 				$j = 0;
 			} else {

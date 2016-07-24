@@ -18,6 +18,12 @@ $pagedata = array(
         'filename' => 'ubosot.php',
 		'my_custom_param_1' => 'print'),
 
+    'primate' => array(
+        'title_1' => 'พิมพ์รายงาน (ส่งเจ้าคณะ)',
+        'description' => 'พิมพ์รายงาน (ส่งเจ้าคณะ)',
+        'filename' => 'report-primate.php',
+		'my_custom_param_1' => 'print'),
+
     'form-regis' => array(
         'title_1' => 'แบบกรอกข้อมูลประวัติภิกขุ',
         'description' => 'แบบกรอกข้อมูลประวัติภิกขุ',

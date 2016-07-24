@@ -16,10 +16,13 @@
 	$xcrud->language('th');
 	$xcrud->table('tbl_bhikkhu');
 	$xcrud->join('bhikkhu_id','tbl_temp_ubosot','bhikkhu_id', 'b');
+
 	$xcrud->order_by('status_id');
 	$xcrud->order_by('phansa_year', 'desc');
-	$xcrud->order_by('ordinate');
+	$xcrud->order_by('ordinate'); // วันอุปสมบทพระ
+	$xcrud->order_by('ordinate_second'); // วันบรรพชาสามเณร
 	$xcrud->order_by('ordering');
+	
 	$xcrud->table_name('พิมพ์รายนามภิกขุ-สามเณร (ลงอุโบสถ)');
 
 
@@ -55,7 +58,8 @@
 		'alias' => 'ฉายา',
 		'alias_meaning' => 'ความหมายฉายา',
 		'position_extra_id' => 'ตำแหน่งพิเศษ',
-		'ordinate' => 'อุปสมบท / บรรพชาสามเณร',
+		'ordinate' => 'อุปสมบท',
+		'ordinate_second' => 'บรรพชาสามเณร',
 		'phansa_year' => 'พรรษา', // เป็นพรรษาที่บันทึกลงใน db จากการคำนวณ $xcrud->column_callback('phansa','calculate_phansa') เพื่อใช้เป็นเงื่อนไขในการ sort หน้าแสดงรายงานภิกขุก่อนพิมพ์
 		'kuti' => 'กุฎิ',
 		'birthday' => 'วันเกิด',
@@ -69,11 +73,12 @@
 		'offence' => 'อาบัติหนัก',
 		'fair' => 'นักธรรม',
 		'graduate' => 'เปรียญ',
-		'leave_date' => 'วันลาสิกขา / วันออกจาวัดนาป่าพง'
+		'leave_date' => 'วันย้ายออกจาวัดนาป่าพง',
+		'exit_date' => 'วันลาสิกขา'
 	));
 
 	// ระบุคอลัมน์ที่ต้องการให้แสดงในหน้า list view
-	$xcrud->columns('face_image, position_id, name, surname, nickname, age_year, alias, position_extra_id, ordinate, phansa_year, kuti, status_id');
+	$xcrud->columns('face_image, position_id, name, surname, nickname, age_year, alias, position_extra_id, ordinate, ordinate_second, phansa_year, kuti, status_id');
 	$xcrud->column_width('ordinate', '180px');
 	$xcrud->column_width('offence', '80px');
 
