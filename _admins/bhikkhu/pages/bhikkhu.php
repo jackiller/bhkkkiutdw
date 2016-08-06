@@ -48,6 +48,7 @@
 
 	// เรียงลำดับ ตาม status_id ก่อน จากนั้นเรียงด้วย phansa_year ต่อจากนั้นเรียงด้วย ordinate (วันอุปสมบท)
 	$xcrud->order_by('status_id');
+	$xcrud->order_by('position_id');
 	$xcrud->order_by('phansa_year', 'desc');
 	$xcrud->order_by('ordinate'); // วันอุปสมบทพระ
 	$xcrud->order_by('ordinate_second'); // วันบรรพชาสามเณร
